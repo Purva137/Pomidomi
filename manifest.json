@@ -1,6 +1,6 @@
 {
-  "name": "Pixel Pomodoro",
-  "short_name": "Pomodoro",
+  "name": "Pomidomi",
+  "short_name": "Pomidomi",
   "description": "A pixel-style Pomodoro timer with focus sessions, breaks, XP, and streaks",
   "start_url": "index.html",
   "display": "standalone",
