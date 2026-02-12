@@ -313,13 +313,13 @@
     function updateDisplay() {
         elements.timerDisplay.textContent = formatTime(state.timeRemaining);
         if (state.mode === 'focus') {
-            elements.modeLabel.textContent = 'Focus';
+            elements.modeLabel.textContent = 'Focus Mode';
             elements.character.src = 'focus.png';
         } else if (state.mode === 'longBreak') {
-            elements.modeLabel.textContent = 'Long Break';
+            elements.modeLabel.textContent = 'You worked hard babe 🫂';
             elements.character.src = 'break.png';
         } else {
-            elements.modeLabel.textContent = 'Break';
+            elements.modeLabel.textContent = 'Break Time :)';
             elements.character.src = 'break.png';
         }
         elements.xpDisplay.textContent = 'XP: ' + state.xp;
