@@ -28,10 +28,8 @@ body {
 }
 
 .card {
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25),
-                0 0 0 1px rgba(0, 0, 0, 0.05);
-    border-radius: 16px;
-    overflow: hidden;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+    border-radius: 0;
 }
 
 /* BLUE THEME (default) */
@@ -40,22 +38,24 @@ body.theme-blue {
 }
 
 body.theme-blue .window {
-    border: 4px solid;
+    border: 6px solid;
     border-top-color: #c1e1f1;
     border-left-color: #c1e1f1;
-    border-right-color: #547385;
-    border-bottom-color: #547385;
-    box-shadow: 0 0 0 2px #82afc7,
-                inset 2px 2px 0 #547385,
-                0 12px 24px rgba(74, 124, 158, 0.2);
+    border-right-color: #3d5a6d;
+    border-bottom-color: #3d5a6d;
+    box-shadow: 6px 6px 0 #3d5a6d,
+                0 0 0 3px #82afc7,
+                inset 3px 3px 0 rgba(0, 0, 0, 0.1);
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
 }
 
 body.theme-blue .title-bar {
     background: #a8d4e8;
-    border-bottom: 4px solid #547385;
-    border-top: 2px solid #c1e1f1;
-    border-left: 2px solid #c1e1f1;
-    border-right: 2px solid #82afc7;
+    border-bottom: 4px solid #3d5a6d;
+    border-top: 3px solid #c1e1f1;
+    border-left: 3px solid #c1e1f1;
+    border-right: 3px solid #82afc7;
 }
 
 body.theme-blue .title-bar span,
@@ -65,10 +65,10 @@ body.theme-blue .timer {
 }
 
 body.theme-blue .content {
-    border-top: 4px solid #547385;
-    border-left: 2px solid #547385;
-    border-right: 2px solid #c1e1f1;
-    border-bottom: 2px solid #c1e1f1;
+    border-top: 4px solid #3d5a6d;
+    border-left: 3px solid #3d5a6d;
+    border-right: 3px solid #c1e1f1;
+    border-bottom: 3px solid #c1e1f1;
 }
 
 body.theme-blue .progress-bar.progress-focus {
@@ -106,22 +106,24 @@ body.theme-brown {
 }
 
 body.theme-brown .window {
-    border: 4px solid;
+    border: 6px solid;
     border-top-color: #e8dcc8;
     border-left-color: #e8dcc8;
-    border-right-color: #3d2b1f;
-    border-bottom-color: #3d2b1f;
-    box-shadow: 0 0 0 2px #8b7355,
-                inset 2px 2px 0 #3d2b1f,
-                0 12px 24px rgba(90, 62, 43, 0.2);
+    border-right-color: #2d1f14;
+    border-bottom-color: #2d1f14;
+    box-shadow: 6px 6px 0 #2d1f14,
+                0 0 0 3px #8b7355,
+                inset 3px 3px 0 rgba(0, 0, 0, 0.1);
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
 }
 
 body.theme-brown .title-bar {
     background: #c4b896;
-    border-bottom: 4px solid #3d2b1f;
-    border-top: 2px solid #e8dcc8;
-    border-left: 2px solid #e8dcc8;
-    border-right: 2px solid #8b7355;
+    border-bottom: 4px solid #2d1f14;
+    border-top: 3px solid #e8dcc8;
+    border-left: 3px solid #e8dcc8;
+    border-right: 3px solid #8b7355;
 }
 
 body.theme-brown .title-bar span,
@@ -131,10 +133,10 @@ body.theme-brown .timer {
 }
 
 body.theme-brown .content {
-    border-top: 4px solid #3d2b1f;
-    border-left: 2px solid #3d2b1f;
-    border-right: 2px solid #e8dcc8;
-    border-bottom: 2px solid #e8dcc8;
+    border-top: 4px solid #2d1f14;
+    border-left: 3px solid #2d1f14;
+    border-right: 3px solid #e8dcc8;
+    border-bottom: 3px solid #e8dcc8;
 }
 
 body.theme-brown .progress-bar.progress-focus {
@@ -172,22 +174,24 @@ body.theme-pink {
 }
 
 body.theme-pink .window {
-    border: 4px solid;
+    border: 6px solid;
     border-top-color: #ffd6e8;
     border-left-color: #ffd6e8;
-    border-right-color: #880e4f;
-    border-bottom-color: #880e4f;
-    box-shadow: 0 0 0 2px #e91e63,
-                inset 2px 2px 0 #880e4f,
-                0 12px 24px rgba(194, 24, 91, 0.2);
+    border-right-color: #5c0a30;
+    border-bottom-color: #5c0a30;
+    box-shadow: 6px 6px 0 #5c0a30,
+                0 0 0 3px #e91e63,
+                inset 3px 3px 0 rgba(0, 0, 0, 0.1);
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
 }
 
 body.theme-pink .title-bar {
     background: #f8bbd9;
-    border-bottom: 4px solid #880e4f;
-    border-top: 2px solid #ffd6e8;
-    border-left: 2px solid #ffd6e8;
-    border-right: 2px solid #e91e63;
+    border-bottom: 4px solid #5c0a30;
+    border-top: 3px solid #ffd6e8;
+    border-left: 3px solid #ffd6e8;
+    border-right: 3px solid #e91e63;
 }
 
 body.theme-pink .title-bar span,
@@ -197,10 +201,10 @@ body.theme-pink .timer {
 }
 
 body.theme-pink .content {
-    border-top: 4px solid #880e4f;
-    border-left: 2px solid #880e4f;
-    border-right: 2px solid #ffd6e8;
-    border-bottom: 2px solid #ffd6e8;
+    border-top: 4px solid #5c0a30;
+    border-left: 3px solid #5c0a30;
+    border-right: 3px solid #ffd6e8;
+    border-bottom: 3px solid #ffd6e8;
 }
 
 body.theme-pink .progress-bar.progress-focus {
@@ -240,6 +244,7 @@ body.theme-pink .win-btn {
     background: #f0f8ff;
     margin: 0 auto;
     overflow: hidden;
+    border-radius: 0;
 }
 
 /* Responsive scaling - widget floats on any device */
