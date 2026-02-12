@@ -1,0 +1,30 @@
+{
+  "name": "Pixel Pomodoro",
+  "short_name": "Pomodoro",
+  "description": "A pixel-style Pomodoro timer with focus sessions, breaks, XP, and streaks",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#d4ebf7",
+  "theme_color": "#4a7c9e",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "focus.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "focus.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "focus.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
