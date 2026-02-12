@@ -119,6 +119,7 @@ body.dark-mode .bg-checker {
 .card {
     border-radius: 0 !important;
     overflow: visible;
+    box-shadow: 6px 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 /* BLUE THEME (default) */
@@ -158,7 +159,7 @@ body.theme-blue #toggle-btn,
 body.theme-blue .theme-btn {
     border-color: #4a7c9e;
     background: #7eb8da;
-    box-shadow: 4px 4px 0 #4a7c9e;
+    box-shadow: 3px 3px 0 #4a7c9e;
 }
 
 body.theme-blue #toggle-btn:hover,
@@ -212,7 +213,7 @@ body.theme-brown #toggle-btn,
 body.theme-brown .theme-btn {
     border-color: #5a3e2b;
     background: #d4a574;
-    box-shadow: 4px 4px 0 #5a3e2b;
+    box-shadow: 3px 3px 0 #5a3e2b;
 }
 
 body.theme-brown #toggle-btn:hover,
@@ -266,7 +267,7 @@ body.theme-pink #toggle-btn,
 body.theme-pink .theme-btn {
     border-color: #c2185b;
     background: #f48fb1;
-    box-shadow: 4px 4px 0 #c2185b;
+    box-shadow: 3px 3px 0 #c2185b;
 }
 
 body.theme-pink #toggle-btn:hover,
@@ -285,38 +286,36 @@ body.theme-pink .win-btn {
 
 /* COMMON STYLES - Floating widget card */
 .window {
-    width: 100%;
-    max-width: 320px;
-    max-height: min(85vh, 520px);
+    width: 420px;
+    max-width: 100%;
     background: var(--bg-window);
     margin: 0 auto;
     overflow: hidden;
     border-radius: 0 !important;
 }
 
-/* Responsive scaling - widget floats on any device */
-@media (max-width: 380px) {
+/* Responsive scaling */
+@media (max-width: 460px) {
+    .window {
+        width: 100%;
+    }
     .app-container {
         transform: scale(0.95);
         transform-origin: center center;
     }
 }
 
-@media (max-width: 340px) {
+@media (max-width: 380px) {
     .app-container {
         transform: scale(0.88);
         transform-origin: center center;
     }
 }
 
-@media (min-width: 768px) {
-    .window {
-        max-width: 340px;
-    }
-}
-
 .title-bar {
-    padding: 8px 12px;
+    height: 56px;
+    min-height: 56px;
+    padding: 6px 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -345,7 +344,7 @@ body.theme-pink .win-btn {
 }
 
 .content {
-    padding: 20px;
+    padding: 24px;
     text-align: center;
     background-color: var(--bg-content);
     background-image:
@@ -357,22 +356,27 @@ body.theme-pink .win-btn {
     background-position: 0 0, 0 16px, 16px -16px, -16px 0px;
 }
 
-
 .stats {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px 14px;
-    font-size: 8px;
-    margin-bottom: 14px;
-    padding: 8px 12px;
+    gap: 6px 12px;
+    font-size: 7px;
+    line-height: 1.2;
+    margin-top: 0;
+    margin-bottom: 7px;
+    padding: 0;
     flex-wrap: wrap;
 }
 
 .stat-sep {
-    font-size: 6px;
+    font-size: 5px;
     opacity: 0.7;
     line-height: 1;
+}
+
+#streak-display {
+    font-size: 6px;
 }
 
 body.theme-blue .stats span {
@@ -407,7 +411,8 @@ body.theme-pink .stat-sep {
     display: flex;
     justify-content: center;
     gap: 8px;
-    margin-bottom: 12px;
+    margin-top: 12px;
+    margin-bottom: 8px;
 }
 
 .session-dots .dot {
@@ -449,20 +454,22 @@ body.theme-pink .session-dots .dot.filled {
 
 h1 {
     font-size: 14px;
-    margin: 0 0 16px 0;
+    font-weight: 700;
+    margin: 6px 0 10px 0;
     text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
 }
 
 #character {
-    width: 96px;
-    height: 96px;
+    width: 108px;
+    height: 108px;
     object-fit: contain;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
+    margin-top: 6px;
     margin-bottom: 20px;
-    display: block;
     margin-left: auto;
     margin-right: auto;
+    display: block;
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
@@ -533,17 +540,19 @@ h1 {
 }
 
 .timer {
-    font-size: 36px;
-    margin-bottom: 12px;
+    font-size: 52px;
+    margin-top: 0;
+    margin-bottom: 8px;
     letter-spacing: 2px;
     text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
 }
 
 .progress-container {
     width: 100%;
-    height: 12px;
+    max-width: 260px;
+    margin: 0 auto 20px auto;
+    height: 8px;
     border: 2px solid;
-    margin-bottom: 20px;
     background: #fff;
 }
 
@@ -569,10 +578,16 @@ body.theme-pink .progress-container {
 button {
     font-family: 'Press Start 2P', cursive;
     font-size: 10px;
-    padding: 12px 24px;
+    padding: 10px 20px;
     border: 4px solid;
     color: #fff;
     cursor: pointer;
+}
+
+#toggle-btn {
+    width: 180px;
+    margin: 0 auto;
+    display: block;
 }
 
 .theme-btn {
@@ -627,8 +642,8 @@ body.dark-mode .icon-btn {
 
 /* Chick name - editable, centered */
 .chick-name-wrap {
-    margin-bottom: 8px;
-    min-height: 18px;
+    margin-bottom: 6px;
+    min-height: 16px;
 }
 
 .chick-name-display {
