@@ -5,21 +5,19 @@
 html, body {
     margin: 0;
     padding: 0;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: fit-content;
+    height: fit-content;
     background: transparent;
-    overflow: hidden;
 }
 
 body {
-    width: 400px;
-    max-width: 100vw;
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
+    display: inline-block;
     font-family: 'Press Start 2P', cursive;
     transition: background 0.3s ease;
+}
+
+.app-container {
+    display: inline-block;
 }
 
 .card {
