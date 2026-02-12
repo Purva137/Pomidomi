@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#4a7c9e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Pixel Pomodoro</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="focus.png" type="image/png">
+    <link rel="apple-touch-icon" href="focus.png">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-blue">
+    <div class="app-container">
+    <div class="card">
+    <div class="window">
+        <div class="window-inner">
+        <div class="title-bar">
+            <span>Pomodoro Timer</span>
+            <div class="title-bar-right">
+                <button id="theme-btn" class="theme-btn">Theme</button>
+                <div class="window-buttons">
+                    <span class="win-btn"></span>
+                    <span class="win-btn"></span>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="stats">
+                <span id="xp-display">XP: 0</span>
+                <span class="stat-sep">|</span>
+                <span id="level-display">Lv.1</span>
+                <span class="stat-sep">|</span>
+                <span id="sessions-display">Sessions: 0</span>
+                <span class="stat-sep">|</span>
+                <span id="streak-display">Streak: 0 days</span>
+            </div>
+            <div id="session-dots" class="session-dots">
+                <span class="dot" data-idx="0"></span>
+                <span class="dot" data-idx="1"></span>
+                <span class="dot" data-idx="2"></span>
+                <span class="dot" data-idx="3"></span>
+            </div>
+            <h1 id="mode-label">Focus</h1>
+            <img id="character" src="focus.png" alt="Character">
+            <div id="timer-display" class="timer">25:00</div>
+            <div class="progress-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+            <button id="toggle-btn">Start</button>
+        </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    <div id="popup-container"></div>
+    <div id="great-work-popup" class="great-work-popup">Great Work!</div>
+    <div id="flash-overlay" class="flash-overlay"></div>
+    <div id="sparkle-container" class="sparkle-container"></div>
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('service-worker.js').then(function (reg) {
+                    console.log('Service worker registered');
+                }).catch(function (err) {
+                    console.warn('Service worker registration failed:', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
