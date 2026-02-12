@@ -2,14 +2,30 @@
     box-sizing: border-box;
 }
 
-body {
+html, body {
     margin: 0;
-    min-height: 100vh;
+    padding: 0;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: transparent;
+    overflow: hidden;
+}
+
+body {
+    width: 400px;
+    max-width: 100vw;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
     font-family: 'Press Start 2P', cursive;
     transition: background 0.3s ease;
+}
+
+.card {
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    border-radius: 16px;
+    overflow: hidden;
 }
 
 /* BLUE THEME (default) */
@@ -19,7 +35,8 @@ body.theme-blue {
 
 body.theme-blue .window {
     border-color: #4a7c9e;
-    box-shadow: 8px 8px 0 #4a7c9e;
+    box-shadow: 8px 8px 0 #4a7c9e,
+                0 12px 24px rgba(74, 124, 158, 0.25);
 }
 
 body.theme-blue .title-bar {
@@ -73,7 +90,8 @@ body.theme-brown {
 
 body.theme-brown .window {
     border-color: #5a3e2b;
-    box-shadow: 8px 8px 0 #5a3e2b;
+    box-shadow: 8px 8px 0 #5a3e2b,
+                0 12px 24px rgba(90, 62, 43, 0.25);
 }
 
 body.theme-brown .title-bar {
@@ -127,7 +145,8 @@ body.theme-pink {
 
 body.theme-pink .window {
     border-color: #c2185b;
-    box-shadow: 8px 8px 0 #c2185b;
+    box-shadow: 8px 8px 0 #c2185b,
+                0 12px 24px rgba(194, 24, 91, 0.25);
 }
 
 body.theme-pink .title-bar {
@@ -174,20 +193,42 @@ body.theme-pink .win-btn {
     border-color: #c2185b;
 }
 
-/* COMMON STYLES */
+/* COMMON STYLES - Floating widget card */
 .window {
-    width: 400px;
+    width: 100%;
+    max-width: 300px;
+    max-height: 520px;
+    max-height: min(90vh, 520px);
     border: 6px solid;
+    border-radius: 12px;
     background: #f0f8ff;
-    box-shadow: 8px 8px 0;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+/* Scaling for small screens */
+@media (max-width: 360px) {
+    .window {
+        transform: scale(0.95);
+        transform-origin: center center;
+    }
+}
+
+@media (max-width: 320px) {
+    .window {
+        max-width: 280px;
+        transform: scale(0.9);
+        transform-origin: center center;
+    }
 }
 
 .title-bar {
-    padding: 10px 12px;
+    padding: 8px 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 4px solid;
+    border-radius: 6px 6px 0 0;
 }
 
 .title-bar span {
@@ -201,8 +242,7 @@ body.theme-pink .win-btn {
 }
 
 .window-buttons {
-    display: flex;
-    gap: 6px;
+    display: none; /* decorative only - hidden for clean widget look */
 }
 
 .win-btn {
@@ -214,7 +254,7 @@ body.theme-pink .win-btn {
 }
 
 .content {
-    padding: 24px;
+    padding: 20px;
     text-align: center;
     background-color: #fff;
     background-image:
