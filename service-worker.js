@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE_NAME = 'pixel-pomodoro-v4';
+const CACHE_NAME = 'pixel-pomodoro-v5';
 
 const ASSETS_TO_CACHE = [
   'index.html',
@@ -8,7 +8,8 @@ const ASSETS_TO_CACHE = [
   'script.js',
   'manifest.json',
   'focus.png',
-  'break.png'
+  'break.png',
+  'firebase-config.js'
 ];
 
 self.addEventListener('install', function (event) {

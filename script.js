@@ -1,15 +1,17 @@
 (function () {
     'use strict';
 
-    const FOCUS_SECONDS = 25 * 60;
-    const BREAK_SECONDS = 5 * 60;
-    const LONG_BREAK_SECONDS = 15 * 60;
     const SESSIONS_BEFORE_LONG_BREAK = 4;
     const XP_PER_SESSION = 10;
     const XP_PER_LEVEL = 100;
 
+    /* Configurable timer durations (loaded from localStorage) */
+    let FOCUS_SECONDS = 25 * 60;
+    let BREAK_SECONDS = 5 * 60;
+    let LONG_BREAK_SECONDS = 15 * 60;
+
     let state = {
-        timeRemaining: FOCUS_SECONDS,
+        timeRemaining: 25 * 60,
         mode: 'focus',
         isRunning: false,
         intervalId: null,
@@ -19,7 +21,12 @@
         sessionsInCycle: 0,
         streak: 0,
         lastSessionDate: null,
-        theme: 'blue'
+        theme: 'blue',
+        darkMode: false,
+        chickName: 'Chicky',
+        achievedFirst: false,
+        achievedFour: false,
+        achievedSevenStreak: false
     };
 
     const elements = {
@@ -38,7 +45,17 @@
         streakDisplay: document.getElementById('streak-display'),
         sessionDots: document.getElementById('session-dots'),
         greatWorkPopup: document.getElementById('great-work-popup'),
-        content: document.querySelector('.content')
+        content: document.querySelector('.content'),
+        settingsBtn: document.getElementById('settings-btn'),
+        settingsModal: document.getElementById('settings-modal'),
+        focusMinInput: document.getElementById('focus-min'),
+        shortBreakMinInput: document.getElementById('short-break-min'),
+        longBreakMinInput: document.getElementById('long-break-min'),
+        settingsSaveBtn: document.getElementById('settings-save'),
+        darkModeBtn: document.getElementById('dark-mode-btn'),
+        chickNameDisplay: document.getElementById('chick-name-display'),
+        chickNameInput: document.getElementById('chick-name-input'),
+        achievementToastContainer: document.getElementById('achievement-toast-container')
     };
 
     /* ---------- SOUNDS ---------- */
@@ -101,26 +118,34 @@
         }, 360);
     }
 
-    /* ---------- DATA ---------- */
+    /* ---------- DATA / STORAGE ---------- */
     function saveData() {
-        const data = {
+        var data = {
             xp: state.xp,
             sessions: state.sessions,
             sessionsInCycle: state.sessionsInCycle,
             streak: state.streak,
             lastSessionDate: state.lastSessionDate,
-            theme: state.theme
+            theme: state.theme,
+            darkMode: state.darkMode,
+            chickName: state.chickName,
+            achievedFirst: state.achievedFirst,
+            achievedFour: state.achievedFour,
+            achievedSevenStreak: state.achievedSevenStreak
         };
         try {
             localStorage.setItem('pomodoroData', JSON.stringify(data));
+            if (typeof window.syncToCloud === 'function') {
+                window.syncToCloud(data);
+            }
         } catch (e) {}
     }
 
     function loadData() {
         try {
-            const raw = localStorage.getItem('pomodoroData');
+            var raw = localStorage.getItem('pomodoroData');
             if (raw) {
-                const data = JSON.parse(raw);
+                var data = JSON.parse(raw);
                 state.xp = Number(data.xp) || 0;
                 state.sessions = Number(data.sessions) || 0;
                 state.sessionsInCycle = Number(data.sessionsInCycle) || 0;
@@ -128,7 +153,48 @@
                 state.lastSessionDate = data.lastSessionDate || null;
                 state.level = Math.floor(state.xp / XP_PER_LEVEL) + 1;
                 state.theme = data.theme || 'blue';
+                state.darkMode = !!data.darkMode;
+                state.chickName = (data.chickName && String(data.chickName).trim()) || 'Chicky';
+                state.achievedFirst = !!data.achievedFirst;
+                state.achievedFour = !!data.achievedFour;
+                state.achievedSevenStreak = !!data.achievedSevenStreak;
             }
+            if (typeof window.syncFromCloud === 'function') {
+                window.syncFromCloud(function (cloud) {
+                    if (cloud) {
+                        state.xp = Number(cloud.xp) || state.xp;
+                        state.sessions = Number(cloud.sessions) || state.sessions;
+                        state.level = Math.floor(state.xp / XP_PER_LEVEL) + 1;
+                        state.streak = Number(cloud.streak) || state.streak;
+                        state.chickName = (cloud.chickName && String(cloud.chickName).trim()) || state.chickName;
+                        saveData();
+                        updateDisplay();
+                    }
+                });
+            }
+        } catch (e) {}
+    }
+
+    function loadSettings() {
+        try {
+            var raw = localStorage.getItem('pomodoroSettings');
+            if (raw) {
+                var s = JSON.parse(raw);
+                FOCUS_SECONDS = Math.max(60, Math.min(3600, (Number(s.focusMin) || 25) * 60));
+                BREAK_SECONDS = Math.max(60, Math.min(1800, (Number(s.shortBreakMin) || 5) * 60));
+                LONG_BREAK_SECONDS = Math.max(60, Math.min(3600, (Number(s.longBreakMin) || 15) * 60));
+            }
+        } catch (e) {}
+    }
+
+    function saveSettings() {
+        try {
+            var s = {
+                focusMin: Math.round(FOCUS_SECONDS / 60),
+                shortBreakMin: Math.round(BREAK_SECONDS / 60),
+                longBreakMin: Math.round(LONG_BREAK_SECONDS / 60)
+            };
+            localStorage.setItem('pomodoroSettings', JSON.stringify(s));
         } catch (e) {}
     }
 
@@ -168,19 +234,16 @@
     }
 
     function saveTheme() {
-        try {
-            const data = JSON.parse(localStorage.getItem('pomodoroData') || '{}');
-            data.theme = state.theme;
-            localStorage.setItem('pomodoroData', JSON.stringify(data));
-        } catch (e) {}
+        saveData();
     }
 
     function loadTheme() {
         try {
-            const raw = localStorage.getItem('pomodoroData');
+            var raw = localStorage.getItem('pomodoroData');
             if (raw) {
-                const data = JSON.parse(raw);
+                var data = JSON.parse(raw);
                 state.theme = data.theme || 'blue';
+                state.darkMode = !!data.darkMode;
             }
         } catch (e) {}
     }
@@ -267,6 +330,7 @@
         }
         updateProgressBar();
         updateSessionDots();
+        updateChickNameDisplay();
     }
 
     /* ---------- ANIMATIONS ---------- */
@@ -390,6 +454,7 @@
             state.sessionsInCycle += 1;
             addXP();
             updateStreak();
+            checkAchievements();
 
             if (state.sessionsInCycle >= SESSIONS_BEFORE_LONG_BREAK) {
                 triggerLongBreak();
@@ -455,27 +520,177 @@
     function applyTheme(themeName) {
         var theme = themeName || state.theme;
         if (themeName) state.theme = theme;
-        document.body.className = 'theme-' + theme;
+        document.body.className = 'theme-' + theme + (state.darkMode ? ' dark-mode' : '');
     }
 
     function cycleTheme() {
         var themes = ['blue', 'brown', 'pink'];
         var idx = themes.indexOf(state.theme);
         state.theme = themes[(idx + 1) % themes.length];
-        saveTheme();
         saveData();
         applyTheme(state.theme);
     }
 
+    function toggleDarkMode() {
+        state.darkMode = !state.darkMode;
+        saveData();
+        applyTheme();
+        if (elements.darkModeBtn) {
+            elements.darkModeBtn.textContent = state.darkMode ? '\u263C' : '\u263E';
+        }
+    }
+
+    /* ---------- SETTINGS MODAL ---------- */
+    function openSettings() {
+        if (!elements.settingsModal) return;
+        loadSettings();
+        if (elements.focusMinInput) elements.focusMinInput.value = Math.round(FOCUS_SECONDS / 60);
+        if (elements.shortBreakMinInput) elements.shortBreakMinInput.value = Math.round(BREAK_SECONDS / 60);
+        if (elements.longBreakMinInput) elements.longBreakMinInput.value = Math.round(LONG_BREAK_SECONDS / 60);
+        elements.settingsModal.classList.add('open');
+        elements.settingsModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeSettings() {
+        if (!elements.settingsModal) return;
+        elements.settingsModal.classList.remove('open');
+        elements.settingsModal.setAttribute('aria-hidden', 'true');
+    }
+
+    function applySettings() {
+        var focusMin = Math.max(1, Math.min(60, parseInt(elements.focusMinInput.value, 10) || 25));
+        var shortMin = Math.max(1, Math.min(30, parseInt(elements.shortBreakMinInput.value, 10) || 5));
+        var longMin = Math.max(1, Math.min(60, parseInt(elements.longBreakMinInput.value, 10) || 15));
+        FOCUS_SECONDS = focusMin * 60;
+        BREAK_SECONDS = shortMin * 60;
+        LONG_BREAK_SECONDS = longMin * 60;
+        saveSettings();
+        if (state.mode === 'focus') {
+            state.timeRemaining = FOCUS_SECONDS;
+        } else if (state.mode === 'longBreak') {
+            state.timeRemaining = LONG_BREAK_SECONDS;
+        } else {
+            state.timeRemaining = BREAK_SECONDS;
+        }
+        updateDisplay();
+        closeSettings();
+    }
+
+    /* ---------- ACHIEVEMENT TOASTS ---------- */
+    function showAchievementToast(message) {
+        if (!elements.achievementToastContainer) return;
+        var toast = document.createElement('div');
+        toast.className = 'achievement-toast';
+        toast.textContent = message;
+        elements.achievementToastContainer.appendChild(toast);
+        setTimeout(function () {
+            toast.remove();
+        }, 3000);
+    }
+
+    function checkAchievements() {
+        if (state.sessions === 1 && !state.achievedFirst) {
+            state.achievedFirst = true;
+            saveData();
+            showAchievementToast('First session!');
+        }
+        if (state.sessions >= 4 && !state.achievedFour) {
+            state.achievedFour = true;
+            saveData();
+            showAchievementToast('4 sessions!');
+        }
+        if (state.streak >= 7 && !state.achievedSevenStreak) {
+            state.achievedSevenStreak = true;
+            saveData();
+            showAchievementToast('7-day streak!');
+        }
+    }
+
+    /* ---------- CHICK NAME ---------- */
+    function updateChickNameDisplay() {
+        if (elements.chickNameDisplay) {
+            elements.chickNameDisplay.textContent = state.chickName || 'Chicky';
+        }
+    }
+
+    function startEditChickName() {
+        if (!elements.chickNameDisplay || !elements.chickNameInput) return;
+        elements.chickNameDisplay.style.display = 'none';
+        elements.chickNameInput.style.display = 'inline-block';
+        elements.chickNameInput.value = state.chickName || 'Chicky';
+        elements.chickNameInput.focus();
+        elements.chickNameInput.select();
+    }
+
+    function saveChickName() {
+        if (!elements.chickNameInput) return;
+        var val = elements.chickNameInput.value.trim();
+        state.chickName = val || 'Chicky';
+        elements.chickNameInput.style.display = 'none';
+        if (elements.chickNameDisplay) {
+            elements.chickNameDisplay.textContent = state.chickName;
+            elements.chickNameDisplay.style.display = 'inline-block';
+        }
+        saveData();
+    }
+
     /* ---------- INIT ---------- */
+    loadSettings();
     loadData();
     loadTheme();
     loadStreak();
+    state.timeRemaining = state.mode === 'focus' ? FOCUS_SECONDS : (state.mode === 'longBreak' ? LONG_BREAK_SECONDS : BREAK_SECONDS);
     applyTheme(state.theme);
     updateDisplay();
+
+    if (elements.darkModeBtn) {
+        elements.darkModeBtn.textContent = state.darkMode ? '\u263C' : '\u263E';
+    }
+
     elements.toggleBtn.addEventListener('click', toggle);
     elements.themeBtn.addEventListener('click', function () {
         playClick();
         cycleTheme();
     });
+
+    if (elements.settingsBtn) {
+        elements.settingsBtn.addEventListener('click', function () {
+            playClick();
+            openSettings();
+        });
+    }
+
+    if (elements.settingsSaveBtn) {
+        elements.settingsSaveBtn.addEventListener('click', function () {
+            playClick();
+            applySettings();
+        });
+    }
+
+    if (elements.settingsModal) {
+        var backdrop = elements.settingsModal.querySelector('.settings-modal-backdrop');
+        if (backdrop) {
+            backdrop.addEventListener('click', closeSettings);
+        }
+    }
+
+    if (elements.darkModeBtn) {
+        elements.darkModeBtn.addEventListener('click', function () {
+            playClick();
+            toggleDarkMode();
+        });
+    }
+
+    if (elements.chickNameDisplay) {
+        elements.chickNameDisplay.addEventListener('click', startEditChickName);
+    }
+
+    if (elements.chickNameInput) {
+        elements.chickNameInput.addEventListener('blur', saveChickName);
+        elements.chickNameInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                saveChickName();
+            }
+        });
+    }
 })();

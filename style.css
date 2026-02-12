@@ -2,6 +2,58 @@
     box-sizing: border-box;
 }
 
+/* CSS variables for dark mode (exact proportions preserved) */
+:root,
+body.theme-blue {
+    --bg-body: #d4ebf7;
+    --bg-window: #f0f8ff;
+    --bg-content: #fff;
+    --bg-checker: #c5e3f6;
+    --border-window: #4a7c9e;
+    --border-title: #4a7c9e;
+    --text-primary: #1a3d52;
+    --text-on-btn: #fff;
+}
+
+body.theme-brown {
+    --bg-body: #e8dcc8;
+    --bg-window: #f5ecd8;
+    --bg-checker: #e8dcc8;
+    --border-window: #5a3e2b;
+    --border-title: #5a3e2b;
+    --text-primary: #2d1f14;
+}
+
+body.theme-pink {
+    --bg-body: #fce4ec;
+    --bg-window: #fce4ec;
+    --bg-checker: #f8bbd9;
+    --border-window: #c2185b;
+    --border-title: #c2185b;
+    --text-primary: #5c0a30;
+}
+
+body.dark-mode {
+    --bg-body: #1a2530;
+    --bg-window: #243444;
+    --bg-content: #2d3d4d;
+    --bg-checker: #354a5e;
+    --border-window: #5a7a8e;
+    --border-title: #5a7a8e;
+    --text-primary: #c1e1f1;
+    --text-on-btn: #1a3d52;
+}
+
+body.dark-mode.theme-brown {
+    --bg-body: #1f1a14;
+    --bg-checker: #2d2820;
+}
+
+body.dark-mode.theme-pink {
+    --bg-body: #2a1a22;
+    --bg-checker: #3d2835;
+}
+
 html, body {
     margin: 0;
     padding: 0;
@@ -20,6 +72,39 @@ body {
     align-items: center;
     font-family: 'Press Start 2P', cursive;
     transition: background 0.3s ease;
+    background: var(--bg-body);
+}
+
+/* Subtle background animation - very low opacity, 20s, no layout shift */
+.bg-checker {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background-image:
+        linear-gradient(45deg, rgba(255,255,255,0.03) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255,255,255,0.03) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.03) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.03) 75%);
+    background-size: 48px 48px;
+    background-position: 0 0, 0 24px, 24px -24px, -24px 0;
+    animation: bgCheckerMove 20s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+body.dark-mode .bg-checker {
+    background-image:
+        linear-gradient(45deg, rgba(255,255,255,0.02) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255,255,255,0.02) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.02) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.02) 75%);
+}
+
+@keyframes bgCheckerMove {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(48px, 48px); }
 }
 
 .app-container {
@@ -27,6 +112,8 @@ body {
     justify-content: center;
     align-items: center;
     overflow: visible;
+    position: relative;
+    z-index: 1;
 }
 
 .card {
@@ -36,23 +123,27 @@ body {
 
 /* BLUE THEME (default) */
 body.theme-blue {
-    background: #d4ebf7;
+    background: var(--bg-body);
 }
 
 body.theme-blue .window {
-    /* Simple flat pixel-art border - single color, no frame */
-    border: 2px solid #4a7c9e;
+    border: 2px solid var(--border-window);
 }
 
 body.theme-blue .title-bar {
     background: #a8d4e8;
-    border-bottom: 2px solid #4a7c9e;
+    border-bottom: 2px solid var(--border-title);
+}
+
+body.dark-mode.theme-blue .title-bar {
+    background: #2d4a5a;
 }
 
 body.theme-blue .title-bar span,
 body.theme-blue .content h1,
-body.theme-blue .timer {
-    color: #1a3d52;
+body.theme-blue .timer,
+body.theme-blue .chick-name-display {
+    color: var(--text-primary);
 }
 
 body.theme-blue .progress-bar.progress-focus {
@@ -86,22 +177,27 @@ body.theme-blue .win-btn {
 
 /* BROWN COZY THEME */
 body.theme-brown {
-    background: #e8dcc8;
+    background: var(--bg-body);
 }
 
 body.theme-brown .window {
-    border: 2px solid #5a3e2b;
+    border: 2px solid var(--border-window);
 }
 
 body.theme-brown .title-bar {
     background: #c4b896;
-    border-bottom: 2px solid #5a3e2b;
+    border-bottom: 2px solid var(--border-title);
+}
+
+body.dark-mode.theme-brown .title-bar {
+    background: #3d2b1f;
 }
 
 body.theme-brown .title-bar span,
 body.theme-brown .content h1,
-body.theme-brown .timer {
-    color: #2d1f14;
+body.theme-brown .timer,
+body.theme-brown .chick-name-display {
+    color: var(--text-primary);
 }
 
 body.theme-brown .progress-bar.progress-focus {
@@ -135,22 +231,27 @@ body.theme-brown .win-btn {
 
 /* PINK THEME */
 body.theme-pink {
-    background: #fce4ec;
+    background: var(--bg-body);
 }
 
 body.theme-pink .window {
-    border: 2px solid #c2185b;
+    border: 2px solid var(--border-window);
 }
 
 body.theme-pink .title-bar {
     background: #f8bbd9;
-    border-bottom: 2px solid #c2185b;
+    border-bottom: 2px solid var(--border-title);
+}
+
+body.dark-mode.theme-pink .title-bar {
+    background: #880e4f;
 }
 
 body.theme-pink .title-bar span,
 body.theme-pink .content h1,
-body.theme-pink .timer {
-    color: #5c0a30;
+body.theme-pink .timer,
+body.theme-pink .chick-name-display {
+    color: var(--text-primary);
 }
 
 body.theme-pink .progress-bar.progress-focus {
@@ -187,7 +288,7 @@ body.theme-pink .win-btn {
     width: 100%;
     max-width: 320px;
     max-height: min(85vh, 520px);
-    background: #f0f8ff;
+    background: var(--bg-window);
     margin: 0 auto;
     overflow: hidden;
     border-radius: 0 !important;
@@ -246,31 +347,16 @@ body.theme-pink .win-btn {
 .content {
     padding: 20px;
     text-align: center;
-    background-color: #fff;
+    background-color: var(--bg-content);
     background-image:
-        linear-gradient(45deg, #c5e3f6 25%, transparent 25%),
-        linear-gradient(-45deg, #c5e3f6 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #c5e3f6 75%),
-        linear-gradient(-45deg, transparent 75%, #c5e3f6 75%);
+        linear-gradient(45deg, var(--bg-checker) 25%, transparent 25%),
+        linear-gradient(-45deg, var(--bg-checker) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, var(--bg-checker) 75%),
+        linear-gradient(-45deg, transparent 75%, var(--bg-checker) 75%);
     background-size: 32px 32px;
     background-position: 0 0, 0 16px, 16px -16px, -16px 0px;
 }
 
-body.theme-brown .content {
-    background-image:
-        linear-gradient(45deg, #e8dcc8 25%, transparent 25%),
-        linear-gradient(-45deg, #e8dcc8 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #e8dcc8 75%),
-        linear-gradient(-45deg, transparent 75%, #e8dcc8 75%);
-}
-
-body.theme-pink .content {
-    background-image:
-        linear-gradient(45deg, #f8bbd9 25%, transparent 25%),
-        linear-gradient(-45deg, #f8bbd9 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #f8bbd9 75%),
-        linear-gradient(-45deg, transparent 75%, #f8bbd9 75%);
-}
 
 .stats {
     display: flex;
@@ -492,6 +578,226 @@ button {
 .theme-btn {
     font-size: 8px;
     padding: 6px 10px;
+}
+
+/* Icon buttons (settings, dark mode) */
+.icon-btn {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    padding: 4px 6px;
+    background: transparent;
+    border: 2px solid;
+    border-color: inherit;
+    color: inherit;
+    cursor: pointer;
+    line-height: 1;
+}
+
+body.theme-blue .icon-btn {
+    border-color: #4a7c9e;
+    color: #1a3d52;
+}
+
+body.theme-blue .icon-btn:hover {
+    background: rgba(74, 124, 158, 0.2);
+}
+
+body.theme-brown .icon-btn {
+    border-color: #5a3e2b;
+    color: #2d1f14;
+}
+
+body.theme-brown .icon-btn:hover {
+    background: rgba(90, 62, 43, 0.2);
+}
+
+body.theme-pink .icon-btn {
+    border-color: #c2185b;
+    color: #5c0a30;
+}
+
+body.theme-pink .icon-btn:hover {
+    background: rgba(194, 24, 91, 0.2);
+}
+
+body.dark-mode .icon-btn {
+    color: #c1e1f1;
+    border-color: #5a7a8e;
+}
+
+/* Chick name - editable, centered */
+.chick-name-wrap {
+    margin-bottom: 8px;
+    min-height: 18px;
+}
+
+.chick-name-display {
+    font-size: 8px;
+    color: inherit;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 2px;
+    display: inline-block;
+}
+
+.chick-name-display:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+body.dark-mode .chick-name-display:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.chick-name-input {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
+    padding: 2px 6px;
+    width: 100px;
+    text-align: center;
+    border: 2px solid;
+    background: #fff;
+}
+
+/* Settings modal - absolute, no layout push */
+.settings-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.settings-modal.open {
+    pointer-events: auto;
+    visibility: visible;
+}
+
+.settings-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+
+.settings-modal-content {
+    position: relative;
+    background: #f0f8ff;
+    border: 2px solid #4a7c9e;
+    padding: 20px;
+    font-family: 'Press Start 2P', cursive;
+    width: 90%;
+    max-width: 280px;
+}
+
+body.theme-brown .settings-modal-content {
+    background: #e8dcc8;
+    border-color: #5a3e2b;
+}
+
+body.theme-pink .settings-modal-content {
+    background: #fce4ec;
+    border-color: #c2185b;
+}
+
+body.dark-mode .settings-modal-content {
+    background: #2d3d4d;
+    border-color: #5a7a8e;
+}
+
+.settings-modal-title {
+    font-size: 10px;
+    margin: 0 0 16px 0;
+    color: inherit;
+}
+
+.settings-row {
+    margin-bottom: 12px;
+}
+
+.settings-row label {
+    display: block;
+    font-size: 8px;
+    margin-bottom: 4px;
+}
+
+.settings-row input {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    padding: 6px 8px;
+    width: 60px;
+    border: 2px solid;
+}
+
+body.theme-blue .settings-row input {
+    border-color: #4a7c9e;
+}
+
+body.theme-brown .settings-row input {
+    border-color: #5a3e2b;
+}
+
+body.theme-pink .settings-row input {
+    border-color: #c2185b;
+}
+
+#settings-save {
+    margin-top: 12px;
+}
+
+/* Achievement toast - bottom-center, slide up + fade */
+.achievement-toast-container {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2600;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.achievement-toast {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.95);
+    border: 2px solid #4a7c9e;
+    box-shadow: 4px 4px 0 #4a7c9e;
+    white-space: nowrap;
+    animation: toastSlideUp 0.3s ease, toastFadeOut 0.3s ease 2.7s forwards;
+}
+
+body.dark-mode .achievement-toast {
+    background: rgba(45,61,77,0.95);
+    border-color: #5a7a8e;
+    box-shadow: 4px 4px 0 #5a7a8e;
+    color: #c1e1f1;
+}
+
+@keyframes toastSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes toastFadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
 }
 
 #popup-container {
