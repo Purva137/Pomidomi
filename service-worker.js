@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE_NAME = 'pixel-pomodoro-v2';
+const CACHE_NAME = 'pixel-pomodoro-v4';
 
 const ASSETS_TO_CACHE = [
   'index.html',
